@@ -2,74 +2,21 @@ import java.util.Scanner;
 
 public class Palindromechecker {
 
-    // Node class
-    static class Node {
-        char data;
-        Node next;
+    // Recursive function to check palindrome
+    public static boolean isPalindrome(String str, int start, int end) {
 
-        Node(char data) {
-            this.data = data;
-            this.next = null;
-        }
-    }
-
-    // Create linked list from string
-    public static Node createList(String str) {
-        Node head = null, tail = null;
-
-        for (char ch : str.toCharArray()) {
-            Node newNode = new Node(ch);
-
-            if (head == null) {
-                head = newNode;
-                tail = newNode;
-            } else {
-                tail.next = newNode;
-                tail = newNode;
-            }
-        }
-
-        return head;
-    }
-
-    // Check palindrome using linked list
-    public static boolean isPalindrome(Node head) {
-
-        if (head == null || head.next == null)
+        // Base condition
+        if (start >= end) {
             return true;
-
-        Node slow = head, fast = head;
-
-        // Find middle
-        while (fast != null && fast.next != null) {
-            slow = slow.next;
-            fast = fast.next.next;
         }
 
-        // Reverse second half
-        Node prev = null;
-        Node curr = slow;
-
-        while (curr != null) {
-            Node next = curr.next;
-            curr.next = prev;
-            prev = curr;
-            curr = next;
+        // If characters don't match
+        if (str.charAt(start) != str.charAt(end)) {
+            return false;
         }
 
-        // Compare halves
-        Node first = head;
-        Node second = prev;
-
-        while (second != null) {
-            if (first.data != second.data)
-                return false;
-
-            first = first.next;
-            second = second.next;
-        }
-
-        return true;
+        // Recursive call
+        return isPalindrome(str, start + 1, end - 1);
     }
 
     public static void main(String[] args) {
@@ -79,9 +26,9 @@ public class Palindromechecker {
         System.out.print("Enter a string: ");
         String input = sc.nextLine().toLowerCase().replaceAll("\\s+", "");
 
-        Node head = createList(input);
+        boolean result = isPalindrome(input, 0, input.length() - 1);
 
-        if (isPalindrome(head))
+        if (result)
             System.out.println("The string is a Palindrome.");
         else
             System.out.println("The string is NOT a Palindrome.");
